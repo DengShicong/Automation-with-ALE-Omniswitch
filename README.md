@@ -3,6 +3,7 @@
 使用Openpyxl读取资产表内的网络设备基础信息，通过Netmiko连接网络设备自动写入CLI命令，并将回显信息保存到LOG文件夹内，使用Paramiko库SFTP下载网络设备内的配置文件并保存，完成连接操作后对LOG文件夹进行压缩打包并自动发送日志邮件推送给运维工作人员（netmiko支持多种厂商设备，包括虚拟环境同样适用，可直接使用EVE-NG进行测试。）
 
 ## 测试环境：
+![1694090216090](https://github.com/DengShicong/Auto-inspection/blob/main/images/1.jpg)
 
 
 
