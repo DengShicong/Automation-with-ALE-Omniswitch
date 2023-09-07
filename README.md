@@ -10,13 +10,13 @@
 
 ![1694084210259](https://github.com/DengShicong/Auto-inspection/blob/main/images/1694084210259.jpg)
 
-![1694084308122](https://github.com/DengShicong/Auto-inspection/blob/main/images/1694084308122.png)
+![1694084308122](https://github.com/DengShicong/Auto-inspection/blob/main/images/1694084308122.jpg)
 
 
 
 ## 自动化巡检流程
 
-![1694084457172](https://github.com/DengShicong/Auto-inspection/blob/main/images/1694084457172.png)
+![1694084457172](https://github.com/DengShicong/Auto-inspection/blob/main/images/1694084457172.jpg)
 
 | 1    | 定义资产表，在Excel表格设置好网络设备的基础连接信息，   执行的CLI命令等 |
 | ---- | ------------------------------------------------------------ |
@@ -32,13 +32,13 @@
 
 资产表作为模板，定义网络设备的基础信息，Sheet名称可自定义，表格宽度为A-I，标题行1内设置网络设备基本信息名称，可自定义但在代码内需修改相对应。
 
-![1694084712822](https://github.com/DengShicong/Auto-inspection/blob/main/images/1694084712822.png)
+![1694084712822](https://github.com/DengShicong/Auto-inspection/blob/main/images/1694084712822.jpg)
 
 ## 命令行模板设置 
 
 根据device_type来命名相应的sheet，设置巡检命令。标题名称comment、cmd_list可自定义，须在代码更改相对应。 
 
-![1694084793414](https://github.com/DengShicong/Auto-inspection/blob/main/images/1694084793414.png)
+![1694084793414](https://github.com/DengShicong/Auto-inspection/blob/main/images/1694084793414.jpg)
 
 ## py文件介绍：
 
