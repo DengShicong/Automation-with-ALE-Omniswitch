@@ -1,137 +1,86 @@
-# ALE设备巡检系统 - 使用说明
+# ALE Network Device Inspection System
 
-## � 使用前准备
+## 📋 Prerequisites
 
-### ⚠️ 重要：必须先配置设备清单
-在运行巡检程序之前，**必须先在Excel文件中设定好设备清单**：
+### ⚠️ Important: Configure Device List First
+Before running the inspection program, **you must configure the device list in the Excel file**:
 
-1. **打开配置文件**: `template.xlsx`
-2. **配置设备信息**: 在"设备信息"工作表中填写设备详情
-3. **检查命令配置**: 确认对应设备类型的命令工作表
-4. **保存文件**: 确保配置已保存
+1. **Open Configuration File**: `template.xlsx`
+2. **Configure Device Information**: Fill in device details in the "Device Information" worksheet
+3. **Check Command Configuration**: Verify the command worksheet for corresponding device types
+4. **Save File**: Ensure the configuration is saved
 
-## �🚀 快速开始
+## 🚀 Quick Start
 
-### 第一步：配置设备清单
+### Step 1: Configure Device List
 ```
-1. 打开 template.xlsx
-2. 填写设备信息
-3. 保存文件
+1. Open template.xlsx
+2. Fill in device information
+3. Save the file
 ```
 
-### 第二步：运行巡检程序
+### Step 2: Run Inspection Program
 ```bash
 python ale_inspection.py
 ```
 
-## 📋 巡检流程
+## 📋 Inspection Process
 
-1. **读取Excel设备清单** - 从template.xlsx读取设备配置
-2. **ALE设备特殊处理** - 执行`show tech-support`命令
-3. **TFTP文件传输** - 下载根目录的三个日志文件
-4. **文件命名规范** - 保存的日志文件名包含设备IP
-5. **完成后处理** - 压缩LOG文件夹并发送邮件
+1. **Read Excel Device List** - Load device configuration from template.xlsx
+2. **ALE Device Special Processing** - Execute `show tech-support` command
+3. **TFTP File Transfer** - Download three log files from root directory
+4. **File Naming Convention** - Save log files with device IP prefix
+5. **Post-processing** - Compress LOG folder and send email
 
-## 📁 核心文件
+## 📁 Core Files
 
 ```
-├── ale_inspection.py          # 主程序（交互式启动）
-├── connect.py                 # 设备连接模块
-├── send_email.py              # 邮件发送模块
-├── zip_file.py                # 文件压缩模块
-├── env_loader.py              # 环境变量加载器
-├── tftp_downloader.py         # TFTP下载工具
-├── template.xlsx              # 设备配置文件
-├── .env                       # 邮件配置文件
-└── LOG/                       # 巡检结果目录
-    ├── 10.10.10.226_20250715_204928/
-    │   ├── 10.10.10.226_tech_support_layer3.log
-    │   ├── 10.10.10.226_tech_support_layer2.log
-    │   ├── 10.10.10.226_tech_support.log
-    │   └── 其他命令输出文件...
-    └── inspection_results_20250715_204928.zip
+├── ale_inspection.py          # Main program (interactive startup)
+├── connect.py                 # Device connection module
+├── send_email.py              # Email sending module
+├── zip_file.py                # File compression module
+├── env_loader.py              # Environment variable loader
+├── tftp_downloader.py         # TFTP download tool
+├── template.xlsx              # Device configuration file
+├── .env                       # Email configuration file
+└── LOG/                       # Inspection results directory
 ```
 
-## ⚙️ Excel配置详细说明
+## ⚙️ Excel Configuration
 
-### 📝 设备信息配置步骤
+Configure device information in `template.xlsx`:
 
-1. **打开Excel文件**: 双击 `template.xlsx` 打开
-2. **选择工作表**: 点击"设备信息"工作表
-3. **填写设备信息**: 按照以下格式填写
+| No. | Status | Device IP | Protocol | Port | Username | Password | Enable Password | Device Type |
+|-----|--------|-----------|----------|------|----------|----------|-----------------|-------------|
+| 1 | Enable | 10.10.10.226 | ssh | 22 | admin | switch | | alcatel_aos |
 
-| 序号 | 状态 | 设备IP | 协议 | 端口 | 用户名 | 密码 | 特权密码 | 设备类型 |
-|------|------|--------|------|------|--------|------|----------|----------|
-| 1 | 启用 | 10.10.10.226 | ssh | 22 | admin | switch | | alcatel_aos |
-| 2 | 启用 | 192.168.1.100 | ssh | 22 | admin | password | | alcatel_aos |
-| 3 | # | 192.168.1.101 | ssh | 22 | admin | password | | cisco_ios |
+**Important Notes:**
+- Use `alcatel_aos` for ALE device type
+- Fill `#` in Status column to skip the device
 
-### 📋 字段说明
+## 📧 Email Configuration
 
-- **序号**: 设备编号，用于排序
-- **状态**:
-  - `启用` 或任何非`#`值 = 执行巡检
-  - `#` = 跳过此设备
-- **设备IP**: 设备的管理IP地址
-- **协议**: `ssh` 或 `telnet`
-- **端口**: SSH端口(通常22) 或 Telnet端口(通常23)
-- **用户名**: 登录用户名
-- **密码**: 登录密码
-- **特权密码**: enable密码(可选，ALE设备通常不需要)
-- **设备类型**: **必须使用 `alcatel_aos`** (用于ALE设备)
+Email parameters are configured in `.env` file:
+- Sender: (configure in .env)
+- Receiver: (configure in .env)
+- SMTP Server: (configure in .env)
 
-### ⚠️ 重要提醒
+## 🔧 Usage
 
-1. **ALE设备类型**: 必须填写 `alcatel_aos`
-2. **保存文件**: 配置完成后务必保存Excel文件
-3. **网络连通性**: 确保能够SSH连接到所有设备
-4. **认证信息**: 确认用户名密码正确
-
-## 📧 邮件配置
-
-邮件参数已在 `.env` 文件中配置完成：
-- 发送者：
-- 接收者：
-- SMTP服务器：
-
-## 🔧 使用方法
-
-### 完整操作流程
-
-#### 步骤1: 配置设备清单 (必须)
-```
-1. 打开 template.xlsx
-2. 在"设备信息"工作表中填写设备信息
-3. 确保设备类型填写为 alcatel_aos
-4. 保存Excel文件
-```
-
-#### 步骤2: 运行巡检程序
+### Interactive Mode
 ```bash
 python ale_inspection.py
 ```
+The program will automatically:
+1. Read Excel configuration
+2. Connect to ALE devices
+3. Execute tech-support command
+4. Attempt to download log files
+5. Execute other inspection commands
+6. Compress result files
+7. Send email notification
 
-#### 步骤3: 程序自动执行
-程序会自动：
-1. **读取Excel配置** - 从template.xlsx读取设备清单
-2. **验证设备连接** - 测试SSH连接
-3. **连接ALE设备** - 逐个连接设备
-4. **执行tech-support命令** - ALE设备特殊处理
-5. **尝试下载日志文件** - TFTP/SCP下载
-6. **执行其他巡检命令** - 根据配置执行
-7. **压缩结果文件** - 生成ZIP压缩包
-8. **发送邮件通知** - 自动发送结果
-
-### ⚠️ 运行前检查清单
-
-- [ ] Excel文件已配置并保存
-- [ ] 设备IP地址正确
-- [ ] 用户名密码正确
-- [ ] 设备类型为 `alcatel_aos`
-- [ ] 网络连接正常
-- [ ] 邮件配置正确
-
-## 📊 输出结果
+## 📊 Output Results
 
 ```
 LOG/
@@ -143,71 +92,57 @@ LOG/
 └── inspection_results_20250715_204928.zip
 ```
 
-## ⚠️ 注意事项
+## ⚠️ Important Notes
 
-1. **TFTP下载**: 如果TFTP下载失败，程序会创建记录文件
-2. **网络连接**: 确保能够SSH连接到ALE设备
-3. **邮件发送**: 邮件配置已完成，会自动发送结果
+1. **TFTP Download**: If TFTP download fails, the program will create record files
+2. **Network Connection**: Ensure SSH connection to ALE devices is available
+3. **Email Sending**: Email configuration completed, will send results automatically
 
-## 🆘 故障排除
+## 🆘 Troubleshooting
 
-### 程序启动失败
-**现象**: 程序报错或没有找到设备
-**解决方案**:
-- 检查 `template.xlsx` 文件是否存在
-- 确认Excel文件中有设备配置
-- 验证设备类型是否为 `alcatel_aos`
+### Connection Failed
+- Check device IP and authentication information
+- Verify network connectivity
 
-### 连接失败
-**现象**: 无法连接到设备
-**解决方案**:
-- 检查设备IP地址是否正确
-- 确认用户名密码是否正确
-- 测试网络连通性 (ping 设备IP)
-- 确认设备SSH服务是否启用
+### File Download Failed
+- Check device TFTP/SCP service
+- Verify file permissions
 
-### 文件下载失败
-**现象**: tech-support日志下载失败
-**解决方案**:
-- 检查设备TFTP/SCP服务是否启用
-- 确认设备文件权限
-- 手动验证日志文件是否存在
+### Email Sending Failed
+- Check email configuration in .env file
+- Verify network connection
 
-### 邮件发送失败
-**现象**: 邮件发送报错
-**解决方案**:
-- 检查 `.env` 文件中的邮件配置
-- 确认网络连接正常
-- 验证SMTP服务器设置
+## 🛠️ Installation
 
-### Excel配置问题
-**现象**: 程序读取不到设备信息
-**解决方案**:
-- 确认Excel文件名为 `template.xlsx`
-- 检查工作表名称是否为"设备信息"
-- 验证列标题是否正确
-- 确保文件已保存
+### Requirements
+```bash
+pip install -r requirements.txt
+```
+
+### Dependencies
+- netmiko>=4.0.0
+- paramiko>=2.7.0
+- openpyxl>=3.0.0
+- pandas>=1.3.0
+
+## 📚 Documentation
+
+- [中文文档](README_CN.md) - Chinese Documentation
+- [English Documentation](README.md) - This file
+
+## 🔧 Features
+
+- ✅ **Multi-vendor Support**: Supports ALE/Alcatel-Lucent devices
+- ✅ **Excel Configuration**: Easy device management through Excel templates
+- ✅ **Tech-support Processing**: Automatic execution and log file download
+- ✅ **Email Notifications**: Automatic email sending with results
+- ✅ **File Compression**: Automatic compression of inspection results
+- ✅ **Error Handling**: Comprehensive error handling and logging
+
+## 📝 License
+
+This project is licensed under the MIT License.
 
 ---
 
-## 📚 快速参考
-
-### 操作顺序
-1. **配置设备** → 打开 `template.xlsx` → 填写设备信息 → 保存
-2. **运行巡检** → `python ale_inspection.py`
-3. **查看结果** → 检查 `LOG/` 目录和邮件
-
-### 关键文件
-- `template.xlsx` - 设备配置文件 (必须先配置)
-- `.env` - 邮件配置文件
-- `LOG/` - 巡检结果目录
-
-### 设备类型
-- ALE设备必须使用: `alcatel_aos`
-
-### 重要提醒
-⚠️ **运行前必须先在Excel中配置好设备清单！**
-
-**使用建议**:
-1. 先配置 `template.xlsx`
-2. 再运行 `python ale_inspection.py`
+**Quick Start**: Configure `template.xlsx` first, then run `python ale_inspection.py`!
