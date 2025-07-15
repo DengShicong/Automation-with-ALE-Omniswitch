@@ -17,6 +17,8 @@ class BackupConfig(object):
     def __init__(self):
         self.device_file = "template.xlsx"
         self.pool = ThreadPool(10)
+        self.success = []
+        self.fail = []
     def load_excel(self):
         try:
             wb=load_workbook(self.device_file)
@@ -68,7 +70,7 @@ class BackupConfig(object):
         try:
             connect = ''
             if host['protocol'].lower().strip() == 'ssh':
-                host['port'] = host['port'] if (['host'] not in [22,None]) else 22
+                host['port'] = host['port'] if (host['port'] not in [22,None]) else 22
                 host.pop('protocol'),host.pop('cmd_list')
 
                 if 'huawei' in host['device_type']:
@@ -76,8 +78,8 @@ class BackupConfig(object):
                 else:
                     connect = ConnectHandler(**host)
 
-            elif host['protocol'].lower().strip() == 'ssh':
-                host['port'] = host['port'] if (['host'] not in [23, None]) else 23
+            elif host['protocol'].lower().strip() == 'telnet':
+                host['port'] = host['port'] if (host['port'] not in [23, None]) else 23
                 host.pop('protocol'), host.pop('cmd_list')
                 host['device_type'] = host['device_type'] + '_telnet'
 
@@ -90,19 +92,27 @@ class BackupConfig(object):
             return connect
 
         except NetmikoTimeoutException as e:
-            res = "Failed connect".format(host['ip'])
+            res = "Failed connect: {}".format(host['ip'])
             print(res)
+            self.fail.append(host['ip'])
+            return None
 
         except AuthenticationException as e:
-            res = "Failed Auth".format(host['ip'])
+            res = "Failed Auth: {}".format(host['ip'])
             print(res)
+            self.fail.append(host['ip'])
+            return None
 
         except SSHException as e:
-            res = "Failed SSH".format(host['ip'])
+            res = "Failed SSH: {}".format(host['ip'])
             print(res)
+            self.fail.append(host['ip'])
+            return None
 
         except Exception as e:
-            print("connectionHandler Failed:{}".format(e))
+            print("connectionHandler Failed: {} - {}".format(host['ip'], e))
+            self.fail.append(host['ip'])
+            return None
 
     def run_cmd(self,host,cmds,enable=False):
         enable = True if host['secret'] else False
@@ -112,25 +122,67 @@ class BackupConfig(object):
 
             if conn:
                 hostname = conn.find_prompt()
+                print(f"成功连接到设备: {host['ip']} ({hostname})")
 
                 if cmds:
                     output = ''
                     for cmd in cmds:
-                        if enable:
-                            conn.enable()
-                            output +=conn.send_command(cmd,strip_command=False,strip_prompt=False)
-                            print(output)
-                        else:
-                            output += conn.send_command(cmd, strip_command=False, strip_prompt=False)
-                            print(output)
+                        try:
+                            if enable:
+                                conn.enable()
+                                result = conn.send_command(cmd,strip_command=False,strip_prompt=False)
+                                output += f"\n命令: {cmd}\n{result}\n"
+                            else:
+                                result = conn.send_command(cmd, strip_command=False, strip_prompt=False)
+                                output += f"\n命令: {cmd}\n{result}\n"
+                        except Exception as cmd_e:
+                            print(f"命令执行失败 {cmd}: {cmd_e}")
+                            output += f"\n命令: {cmd}\n错误: {cmd_e}\n"
 
+                    print(f"设备 {host['ip']} 命令执行完成")
+                    if host['ip'] not in self.success:
+                        self.success.append(host['ip'])
                 else:
-                    pass
+                    print(f"设备 {host['ip']} 无命令需要执行")
+                    if host['ip'] not in self.success:
+                        self.success.append(host['ip'])
 
                 conn.disconnect()
 
         except Exception as e:
-            print(f"run_cmd Failed:{e}")
+            print(f"run_cmd Failed: {host['ip']} - {e}")
+            if host['ip'] not in self.fail:
+                self.fail.append(host['ip'])
+
+    def connect_t(self):
+        """连接测试方法"""
+        start_time = datetime.now()
+
+        hosts = self.get_device_info()
+        for host in hosts:
+            self.test_connection(host)
+
+        end_time = datetime.now()
+        print("连接测试完成,耗时:{:0.2f}s".format((end_time-start_time).total_seconds()))
+
+    def test_connection(self, host):
+        """测试单个设备连接"""
+        try:
+            conn = self.connectHandler(host)
+            if conn:
+                hostname = conn.find_prompt()
+                print(f"连接测试成功: {host['ip']} - {hostname}")
+                if host['ip'] not in self.success:
+                    self.success.append(host['ip'])
+                conn.disconnect()
+            else:
+                print(f"连接测试失败: {host['ip']}")
+                if host['ip'] not in self.fail:
+                    self.fail.append(host['ip'])
+        except Exception as e:
+            print(f"连接测试异常: {host['ip']} - {e}")
+            if host['ip'] not in self.fail:
+                self.fail.append(host['ip'])
 
     def connect_test(self):
         pass
