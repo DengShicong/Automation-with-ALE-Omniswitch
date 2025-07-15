@@ -1,5 +1,82 @@
 # ALE Network Device Inspection System
 
+## 🎯 Overview
+
+This is an automated network device inspection system specifically designed for **ALE (Alcatel-Lucent Enterprise)** network devices. The system provides comprehensive device health monitoring, configuration backup, and automated reporting capabilities.
+
+### 🔧 What This Program Does
+
+The ALE Network Device Inspection System automates the following tasks:
+
+1. **Device Connectivity Testing** - Automatically connects to multiple ALE devices via SSH
+2. **Tech-Support Execution** - Runs `show tech-support` command on ALE devices
+3. **Log File Collection** - Downloads critical log files from device root directory:
+   - `tech_support_layer3.log`
+   - `tech_support_layer2.log`
+   - `tech_support.log`
+4. **Configuration Backup** - Executes predefined CLI commands to collect device configurations
+5. **Data Organization** - Organizes collected data with device IP prefixes and timestamps
+6. **Result Compression** - Automatically compresses all inspection results into ZIP files
+7. **Email Notifications** - Sends automated email reports with inspection results as attachments
+
+### 🎯 Purpose & Benefits
+
+- **Automated Network Auditing**: Eliminate manual device inspection tasks
+- **Centralized Log Collection**: Gather critical system logs from multiple devices
+- **Scheduled Health Checks**: Regular monitoring of network infrastructure
+- **Compliance Reporting**: Generate comprehensive reports for network compliance
+- **Troubleshooting Support**: Collect diagnostic information for technical support
+- **Time Efficiency**: Reduce hours of manual work to minutes of automated execution
+
+### 📸 System Demonstration
+
+![ALE Inspection System](IMG/image.png)
+
+*The system interface showing automated inspection process and results*
+
+### 🔄 Workflow Overview
+
+```
+Excel Configuration → Device Connection → Tech-Support Execution → Log Download → Result Compression → Email Report
+       ↓                    ↓                     ↓                    ↓                ↓               ↓
+   template.xlsx      SSH to devices      show tech-support      TFTP/SCP files    ZIP creation    SMTP delivery
+```
+
+**Typical Execution Flow:**
+1. 📋 Read device list from Excel
+2. 🔌 Establish SSH connections
+3. ⚡ Execute tech-support commands
+4. 📥 Download log files via TFTP/SCP
+5. 📝 Run additional CLI commands
+6. 🗜️ Compress all results
+7. 📧 Email compressed results to administrators
+
+## 🚀 Quick Start
+
+### Step 1: Install Dependencies
+```bash
+pip install -r requirements.txt
+```
+
+### Step 2: Configure Device List
+```
+1. Open template.xlsx
+2. Fill in device information
+3. Save the file
+```
+
+### Step 3: Configure Email Settings (Optional)
+```
+1. Edit .env file
+2. Set SMTP server and credentials
+3. Configure sender/receiver emails
+```
+
+### Step 4: Run Inspection Program
+```bash
+python ale_inspection.py
+```
+
 ## 📋 Prerequisites
 
 ### ⚠️ Important: Configure Device List First
@@ -9,20 +86,6 @@ Before running the inspection program, **you must configure the device list in t
 2. **Configure Device Information**: Fill in device details in the "Device Information" worksheet
 3. **Check Command Configuration**: Verify the command worksheet for corresponding device types
 4. **Save File**: Ensure the configuration is saved
-
-## 🚀 Quick Start
-
-### Step 1: Configure Device List
-```
-1. Open template.xlsx
-2. Fill in device information
-3. Save the file
-```
-
-### Step 2: Run Inspection Program
-```bash
-python ale_inspection.py
-```
 
 ## 📋 Inspection Process
 
