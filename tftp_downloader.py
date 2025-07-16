@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 """
-TFTP文件下载工具
+ALE网络运维工具包 - TFTP文件下载工具
 专门用于从ALE设备下载tech-support日志文件
 """
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 """
-邮件发送模块
+ALE网络运维工具包 - 邮件发送模块
 使用.env文件配置邮件参数
 """
 
@@ -31,13 +31,13 @@ def get_default_config():
         'smtp_use_tls': True,
         'sender_email': '',
         'sender_password': '',
-        'sender_name': '网络巡检系统',
+        'sender_name': 'ALE网络运维工具包',
         'receiver_email': '',
         'receiver_name': '系统管理员',
         'cc_emails': [],
         'bcc_emails': [],
-        'subject_prefix': '[网络巡检]',
-        'subject_template': '{prefix} {date} ALE设备巡检报告',
+        'subject_prefix': '[ALE运维]',
+        'subject_template': '{prefix} {date} ALE设备运维报告',
         'email_template': 'html',
         'max_attachment_size': 25,
         'compress_attachments': True,
@@ -68,12 +68,12 @@ def create_email_body(success_devices, failed_devices, total_time=None, attachme
     </head>
     <body>
         <div class="header">
-            <h2>🔍 ALE设备巡检报告</h2>
+            <h2>🔍 ALE设备运维报告</h2>
             <p><strong>巡检时间:</strong> {current_time}</p>
         </div>
 
         <div class="summary">
-            <h3>📊 巡检汇总</h3>
+            <h3>📊 运维汇总</h3>
             <ul>
                 <li><strong>设备总数:</strong> {len(success_devices) + len(failed_devices)}</li>
                 <li class="success"><strong>成功设备:</strong> {len(success_devices)}</li>
@@ -113,7 +113,7 @@ def create_email_body(success_devices, failed_devices, total_time=None, attachme
 
     html_body += f"""
         <div class="footer">
-            <p>此邮件由网络设备自动化巡检系统自动发送</p>
+            <p>此邮件由ALE网络运维工具包自动发送</p>
             <p>如有问题，请联系系统管理员</p>
             <p>发送时间: {current_time}</p>
         </div>
@@ -169,8 +169,8 @@ def send_email(subject=None, body=None, attachment_files=None, success_devices=N
                 body = f"""
                 <html>
                 <body>
-                    <h2>ALE设备巡检完成</h2>
-                    <p>巡检时间: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}</p>
+                    <h2>ALE设备运维完成</h2>
+                    <p>运维时间: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}</p>
                     <p>详细结果请查看附件</p>
                 </body>
                 </html>
@@ -310,7 +310,7 @@ def main():
     choice = input("\n是否发送测试邮件? (y/n): ").lower().strip()
     if choice in ['y', 'yes', '是']:
         success = send_email(
-            subject="[测试] 网络巡检系统邮件测试",
+            subject="[测试] ALE网络运维工具包邮件测试",
             success_devices=["192.168.1.1", "192.168.1.2"],
             failed_devices=["192.168.1.3"],
             total_time="30.5秒"
