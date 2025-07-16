@@ -166,4 +166,30 @@ LOG/
 
 ---
 
-**使用建议**: 直接运行 `python ale_inspection.py` 开始巡检！
+## 📦 Windows打包版本
+
+本项目提供Windows可执行文件版本，无需安装Python环境即可直接运行。
+
+### 🚀 Release版本演示
+
+![Windows EXE版本演示](IMG/image.png)
+
+### 📥 获取方式
+
+1. 访问项目的 [Releases](../../releases) 页面
+2. 下载最新版本的Windows打包文件
+3. 解压后配置 `template.xlsx` 和 `.env` 文件
+4. 双击 `ALE网络运维工具包.exe` 运行
+
+### 💡 打包版本特点
+
+- ✅ **免安装** - 无需Python环境
+- ✅ **独立运行** - 包含所有必要库
+- ✅ **配置简单** - 只需配置文件即可使用
+- ✅ **兼容性好** - 支持Windows 7及以上版本
+
+---
+
+**使用建议**:
+- 开发环境：直接运行 `python ale_inspection.py`
+- 生产环境：使用Release中的Windows打包版本

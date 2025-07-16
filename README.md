@@ -247,10 +247,36 @@ pip install -r requirements.txt
 - ✅ **Comprehensive Logging**: Detailed error handling and progress tracking
 - ✅ **Console Interface**: Command-line interface for automated operations
 
+## 📦 Windows Packaged Version
+
+This project provides Windows executable version that runs without Python installation.
+
+### 🚀 Release Version Demo
+
+![Windows EXE Version Demo](IMG/image.png)
+
+### 📥 How to Get
+
+1. Visit the project [Releases](../../releases) page
+2. Download the latest Windows packaged file
+3. Extract and configure `template.xlsx` and `.env` files
+4. Double-click `ALE网络运维工具包.exe` to run
+
+### 💡 Packaged Version Features
+
+- ✅ **No Installation Required** - No Python environment needed
+- ✅ **Standalone Execution** - Contains all necessary libraries
+- ✅ **Simple Configuration** - Only configuration files needed
+- ✅ **Good Compatibility** - Supports Windows 7 and above
+
 ## 📝 License
 
 This project is licensed under the MIT License.
 
 ---
 
-**Quick Start**: Configure `template.xlsx` first, then run `python ale_inspection.py`!
+**Usage Recommendations**:
+- Development: Run `python ale_inspection.py` directly
+- Production: Use Windows packaged version from Releases
+
+**Ready to automate your network operations!** 🚀
