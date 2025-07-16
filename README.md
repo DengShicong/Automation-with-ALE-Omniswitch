@@ -253,7 +253,7 @@ This project provides Windows executable version that runs without Python instal
 
 ### 🚀 Release Version Demo
 
-![Windows EXE Version Demo](IMG/image.png)
+![Windows EXE Version Demo](IMG/exe.png)
 
 ### 📥 How to Get
 

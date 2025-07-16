@@ -172,7 +172,7 @@ LOG/
 
 ### 🚀 Release版本演示
 
-![Windows EXE版本演示](IMG/image.png)
+![Windows EXE版本演示](IMG/exe.png)
 
 ### 📥 获取方式
 
